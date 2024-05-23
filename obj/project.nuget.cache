@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sqZKt7//7AA=",
+  "dgSpecHash": "e1Xso807mXk=",
   "success": true,
   "projectFilePath": "/Users/jccervantes/Documents/_devstuff/khaelijah-csharp/api/api.csproj",
   "expectedPackageFiles": [
@@ -64,6 +64,7 @@
     "/Users/jccervantes/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.4.0/swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
     "/Users/jccervantes/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",
     "/Users/jccervantes/.nuget/packages/system.collections.immutable/6.0.0/system.collections.immutable.6.0.0.nupkg.sha512",
+    "/Users/jccervantes/.nuget/packages/system.componentmodel.annotations/5.0.0/system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "/Users/jccervantes/.nuget/packages/system.composition/6.0.0/system.composition.6.0.0.nupkg.sha512",
     "/Users/jccervantes/.nuget/packages/system.composition.attributedmodel/6.0.0/system.composition.attributedmodel.6.0.0.nupkg.sha512",
     "/Users/jccervantes/.nuget/packages/system.composition.convention/6.0.0/system.composition.convention.6.0.0.nupkg.sha512",
