@@ -2,7 +2,6 @@
 using api.Data;
 using api.Dto.Consumer;
 using api.Mapper;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +25,7 @@ namespace api.Controllers
         public async Task<ActionResult> CreateConsumer([FromBody] CreateConsumerRequestDto consumerDto)
         {
             var consumerModel = consumerDto.ToConsumerFromCreateDto();
+            consumerModel.BirthDate = consumerModel.BirthDate.ToLocalTime();
             await _context.Consumers.AddAsync(consumerModel);
             _context.SaveChanges();
 
@@ -51,12 +51,39 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById([FromRoute] string id)
+        public async Task<ActionResult> GetById([FromRoute] int id)
         {
             var consumer = await _context.Consumers.FindAsync(id);
 
             return consumer == null ? NotFound() : Ok(consumer.ToConsumerDto());
         }
+
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id, [FromBody] CreateConsumerRequestDto consumerDto)
+        {
+
+            var consumer = _context.Consumers.FirstOrDefault(s => s.Id == id);
+
+            if (consumer == null)
+            {
+                return NotFound();
+            }
+
+
+            consumer.AccountName = consumerDto.AccountName;
+            consumer.FirstName = consumerDto.FirstName;
+            consumer.LastName = consumerDto.LastName;
+            consumer.BirthDate = consumerDto.BirthDate.ToLocalTime();
+            consumer.Mobile = consumerDto.Mobile;
+
+            _context.Update(consumer);
+            _context.SaveChanges();
+
+            return Ok(consumer.ToConsumerDto());
+        }
+
+
     }
 
 
