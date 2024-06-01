@@ -16,10 +16,11 @@ namespace api.Mapper
                 AccountName = consumerModel.AccountName,
                 FirstName = consumerModel.FirstName,
                 LastName = consumerModel.LastName,
-                BirthDate = consumerModel.BirthDate
+                BirthDate = consumerModel.BirthDate,
+                Mobile = consumerModel.Mobile,
+                Addresses = consumerModel.Address.Select(el => el.ToAddressDto()).ToList()
             };
         }
-
         public static Consumer ToConsumerFromCreateDto(this CreateConsumerRequestDto consumerDto)
         {
 

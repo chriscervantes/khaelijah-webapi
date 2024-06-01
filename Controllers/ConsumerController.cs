@@ -1,7 +1,9 @@
 
 using api.Data;
 using api.Dto.Consumer;
+using api.Interface;
 using api.Mapper;
+using api.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,21 +17,23 @@ namespace api.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-        public ConsumerController(ApplicationDbContext context)
+        private readonly IConsumerRepository _consumerRepo;
+        public ConsumerController(ApplicationDbContext context, IConsumerRepository consumerRepo)
         {
             _context = context;
+            _consumerRepo = consumerRepo;
+
         }
 
 
         [HttpPost]
-        public async Task<ActionResult> CreateConsumer([FromBody] CreateConsumerRequestDto consumerDto)
+        public async Task<IActionResult> CreateConsumer([FromBody] CreateConsumerRequestDto consumerDto)
         {
             var consumerModel = consumerDto.ToConsumerFromCreateDto();
             consumerModel.BirthDate = consumerModel.BirthDate.ToLocalTime();
-            await _context.Consumers.AddAsync(consumerModel);
-            _context.SaveChanges();
+            await _consumerRepo.CreateAsync(consumerModel);
 
-            return CreatedAtAction(nameof(GetById), new { id = consumerModel.Id }, consumerModel);
+            return Created();  // CreatedAtAction(nameof(GetById), new { id = consumerModel.Id }, consumerModel);
 
         }
 
@@ -38,7 +42,7 @@ namespace api.Controllers
         public async Task<ActionResult> GetAll()
         {
 
-            var consumers = await _context.Consumers.ToListAsync();
+            var consumers = await _consumerRepo.GetAllAsync();
 
             if (consumers == null)
             {
@@ -53,39 +57,39 @@ namespace api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById([FromRoute] int id)
         {
-            var consumer = await _context.Consumers.FindAsync(id);
+
+            var consumer = await _consumerRepo.GetByIdAsync(id);
 
             return consumer == null ? NotFound() : Ok(consumer.ToConsumerDto());
         }
 
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] CreateConsumerRequestDto consumerDto)
+        public async Task<ActionResult> Update([FromRoute] int id, [FromBody] CreateConsumerRequestDto consumerDto)
         {
 
-            var consumer = _context.Consumers.FirstOrDefault(s => s.Id == id);
+            var consumer = await _consumerRepo.UpdateAsync(id, consumerDto);
 
             if (consumer == null)
             {
                 return NotFound();
             }
 
-
-            consumer.AccountName = consumerDto.AccountName;
-            consumer.FirstName = consumerDto.FirstName;
-            consumer.LastName = consumerDto.LastName;
-            consumer.BirthDate = consumerDto.BirthDate.ToLocalTime();
-            consumer.Mobile = consumerDto.Mobile;
-
-            _context.Update(consumer);
-            _context.SaveChanges();
-
             return Ok(consumer.ToConsumerDto());
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete([FromRoute] int id)
+        {
 
+            var consumer = await _consumerRepo.DeleteAsync(id);
+
+            if (consumer == null)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(200);
+        }
     }
-
-
-
 }

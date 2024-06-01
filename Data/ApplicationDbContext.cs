@@ -5,11 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Console;
 
 namespace api.Data
 {
     public class ApplicationDbContext : DbContext
     {
+
+        public static readonly ILoggerFactory loggerFactory = new LoggerFactory();
         private readonly IConfiguration configuration;
 
         public DbSet<Stock> Stocks { get; set; }
@@ -25,7 +28,7 @@ namespace api.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseLoggerFactory(loggerFactory).UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
         }
 
 

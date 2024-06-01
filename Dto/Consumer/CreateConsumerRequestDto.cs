@@ -1,4 +1,6 @@
 
+using api.Models;
+
 namespace api.Dto.Consumer
 {
     public class CreateConsumerRequestDto

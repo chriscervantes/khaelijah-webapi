@@ -36,7 +36,7 @@ namespace api.Models
 
         public string? Mobile { get; set; }
 
-        public Address? Address { get; set; }
+        public List<Address> Address { get; set; }
 
     }
 }
