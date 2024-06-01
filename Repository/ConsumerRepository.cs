@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using api.Data;
 using api.Dto.Consumer;
 using api.Interface;
@@ -59,8 +60,9 @@ namespace api.Repository
         public async Task<Consumer?> UpdateAsync(int id, CreateConsumerRequestDto consumerDto)
         {
 
-            var existingConsumer = _context.Consumers.FirstOrDefault(s => s.Id == id);
+            var existingConsumer = _context.Consumers.Include(consumer => consumer.Address).FirstOrDefault(s => s.Id == id);
 
+            Trace.Write("test me");
             if (existingConsumer == null)
             {
                 return null;
