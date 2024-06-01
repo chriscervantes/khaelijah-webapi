@@ -62,7 +62,6 @@ namespace api.Repository
 
             var existingConsumer = _context.Consumers.Include(consumer => consumer.Address).FirstOrDefault(s => s.Id == id);
 
-            Trace.Write("test me");
             if (existingConsumer == null)
             {
                 return null;
